@@ -16,11 +16,11 @@ end
 
 def fit(url)
   url
-    .delete("https")
-    .delete("http")
-    .delete("://www.")
-    .delete("://")
+    .gsub("https:", "")
+    .gsub("http:", "")
+    .gsub("www.", "")
     .gsub("github", "github".green)
+    .gsub(/\/\//, "")
 end
 
 def fit_index(index)
