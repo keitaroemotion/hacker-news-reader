@@ -1,0 +1,2 @@
+gem install colorize
+cp hnr /usr/local/bin

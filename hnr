@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'open-uri'
+require 'colorize'
+
+hacker_news = 'https://news.ycombinator.com'
+
+urls = open(hacker_news)
+         .read
+         .split("a href=\"")
+         .select {|x| x.start_with?("http")}
+         .map { |x| x.split("\"").first }
+         .select{ |x| !hacker_news.include? x }
+         .select{ |x| !x.include?("ycombinator") }
+
+def fit(url)
+  url
+    .delete("https")
+    .delete("http")
+    .delete("://www.")
+    .delete("://")
+    .gsub("github", "github".green)
+end
+
+def fit_index(index)
+  index.to_s.size == 1 ? "#{index} " : index.to_s
+end
+
+if /[^0-9]/.match(ARGV[0]).nil? && !ARGV[0].nil?
+  urls = urls[0...ARGV[0].to_i]
+end
+
+urls.each_with_index do |url, i|
+  puts "[#{fit_index(i).yellow}] #{fit(url)}"
+end
+
+print "Enter: "
+i = $stdin.gets.chomp
+system "open #{urls[i.to_i]}"
